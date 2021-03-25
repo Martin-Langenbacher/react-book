@@ -4,9 +4,15 @@ import PropTypes from 'prop-types';
 import './Card.css';
 import Animal from "./Animal";
 
-const uncovered = false;
+// const uncovered = false;
 
-export default function Card({ animal, uncovered }) {
+export default function Card({ animal, uncovered, onSelectProperty, selectedProperty, }) {
+
+    /*
+    function handleClick(event, prop) {
+        console.log(`${prop} clicked, ${event}`);
+    } */
+
     const front = (
         <div className="card">
             <h1> {animal.name ? animal.name : 'Unbekannt'}</h1>
@@ -19,7 +25,10 @@ export default function Card({ animal, uncovered }) {
                 {Object.keys(Animal.properties).map(property => {
                     const animalProperty = Animal.properties[property];
                     return (
-                        <tr key={property}>
+                        <tr key={property}
+                            className={selectedProperty === property ? 'active' : ''}
+                            onClick={() => { onSelectProperty(property) }}
+                            >
                             <td>{animalProperty.label}</td>
                             <td>{animal[property]}&nbsp;{animalProperty.unit}</td>
                         </tr>
@@ -36,14 +45,16 @@ export default function Card({ animal, uncovered }) {
         return back;
     }
 
-
-
 }
 
 
 Card.propTypes = {
     uncovered: PropTypes.bool.isRequired,
-    animal: PropTypes.shape({
+    animal: PropTypes.instanceOf(Animal).isRequired,
+    onSelectProperty: PropTypes.func,
+    selectedProperty: PropTypes.string,
+
+    /*.shape({
             name: PropTypes.string.isRequired,
             image: PropTypes.string.isRequired,
             size: PropTypes.number,
@@ -51,7 +62,7 @@ Card.propTypes = {
             age: PropTypes.number,
             offspring: PropTypes.number,
             speed: PropTypes.number
-        }),
+        }), */
 };
 
 
